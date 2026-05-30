@@ -2,13 +2,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import type { DataType } from '../../types/dataTypes'
 import formatCurrency from "./formatCurrency";
 import { Button } from "./ui/button";
+import { useAction } from "./context/ShoppingCartContext";
+import { ADD_TO_CART } from "./context/Actions";
+import { useState } from "react";
 
 export default function CardCategory( { obj } : {obj : DataType} ) 
 {
-   const quantity = 0 ;
+   const { ActionTrigger , cartItems } = useAction() ;
+    //const quantity = cartItems.length ;
+   const[categoryName , setCategoryName] = useState({} as DataType)
+
+   const addToCart = (obj : DataType) => 
+   {
+      ActionTrigger({
+          type : ADD_TO_CART , 
+          payload : obj 
+      })
+
+      setCategoryName(obj)
+   }
+
+   console.log(categoryName)
 
     return (
-        <Card className={`w-[300px] ${quantity === 0 ? 'h-[350px]' : 'h-[400px]'}`}>
+        <Card className={`w-[300px] ${cartItems.length === 0 ? 'h-[350px]' : 'h-[400px]'}`}>
           <CardHeader className="w-full">
             <img  
                src={obj.imgUrl} 
@@ -22,8 +39,14 @@ export default function CardCategory( { obj } : {obj : DataType} )
                <span className="text-gray-400 text-[13px]">{formatCurrency(parseFloat(obj.price))}</span>
              </CardTitle>
              <div className="w-full">
-              {quantity === 0 ?
-                <Button className="w-full bg-blue-600 text-white h-[40px] rounded-[12px]" variant="default">Add to Cart</Button>
+              {cartItems.length === 0 ?
+                <Button 
+                  className="w-full bg-blue-600 text-white h-[40px] rounded-[12px]" 
+                  onClick={() => addToCart(obj)}
+                  variant="default"
+                >
+                  Add to Cart
+                </Button>
                 :
                 <div className ="flex flex-col justify-center items-center gap-3">
                   <div className="flex items-center gap-2">

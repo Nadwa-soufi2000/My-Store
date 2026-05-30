@@ -1,6 +1,7 @@
+import type { ActionType, CartItemType } from "../../../types/dataTypes";
 import { ADD_TO_CART , REMOVE_FROM_CART } from "./Actions";
 
-export const reducer = (state, action) =>
+export const reducer = (state : { cartItems : CartItemType[] }, action : ActionType) =>
 {
   switch(action.type) 
   {
